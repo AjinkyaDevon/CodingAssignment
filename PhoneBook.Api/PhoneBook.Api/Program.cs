@@ -11,7 +11,24 @@ namespace PhoneBook
     {
         public static void Main(string[] args)
         {
+            var corsPolicy = "allow-all-origins";
             var builder = WebApplication.CreateBuilder(args);
+            //Add CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(corsPolicy, policy =>
+                {
+                    policy.AllowAnyOrigin();
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyHeader();
+                });
+            });
+
+            //Enforce lower case url
+            builder.Services.Configure<RouteOptions>(config =>
+            {
+                config.LowercaseUrls = true;
+            });
             //Add logger
             builder.Logging.AddConsole();
             // Add services to the container.
@@ -60,6 +77,8 @@ namespace PhoneBook
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(corsPolicy);
 
             app.UseAuthorization();
 

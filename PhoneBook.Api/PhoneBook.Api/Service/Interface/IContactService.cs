@@ -4,7 +4,7 @@ namespace PhoneBook.Service
 {
     public interface IContactService
     {
-        public Task<bool> AddContact(AddContactRequestDto contactDto);
+        public Task<Guid?> AddContact(AddContactRequestDto contactDto);
         public Task<bool> DeleteContactById(Guid contactId);
         public Task<ContactDto> GetContactById(Guid contactId);
         public Task<IEnumerable<ContactDto>> GetContacts(int offset,int numRecords);

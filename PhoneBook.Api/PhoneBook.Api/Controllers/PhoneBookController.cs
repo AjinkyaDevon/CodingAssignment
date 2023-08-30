@@ -8,7 +8,7 @@ using PhoneBook.Service;
 
 namespace PhoneBook.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/contact")]
     [ApiController]
     [ServiceFilter(typeof(ApiKeyAuthFilter))]
     public class PhoneBookController : ControllerBase
@@ -51,10 +51,10 @@ namespace PhoneBook.Controllers
         public async Task<IActionResult> Post([FromBody] AddContactRequestDto contact) 
         {
             logger.LogDebug("Start implementation : Post");
-            var status=await contactService.AddContact(contact);
+            var Id=await contactService.AddContact(contact);
             logger.LogDebug("End implementation : Post");
-            if(status)
-                return Ok();
+            if(Id!=null)
+                return Ok(Id);
             else
                 return new StatusCodeResult(500);
         }

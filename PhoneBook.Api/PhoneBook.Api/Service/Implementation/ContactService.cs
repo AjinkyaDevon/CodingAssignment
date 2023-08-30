@@ -16,18 +16,18 @@ namespace PhoneBook.Service
         }
 
         #region service
-        public async Task<bool> AddContact(AddContactRequestDto contactDto)
+        public async Task<Guid?> AddContact(AddContactRequestDto contactDto)
         {
             try
             {
-                await contactRepository.Add(contactDto);
-                return true;
+                var Id=await contactRepository.Add(contactDto);
+                return Id;
             } 
             catch (Exception ex)
             {
                 //todo add global exception filter
                 logger.LogError(1,exception:ex,message:"Error in adding contact to db");
-                return false;
+                return null;
             }
         }
 

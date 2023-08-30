@@ -1,4 +1,5 @@
-﻿using Castle.Core.Logging;
+﻿using AutoMapper.Execution;
+using Castle.Core.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -84,19 +85,21 @@ namespace PhoneBook.Api.Test.Controller
         [Test]
         public void AddContactPositiveTest() 
         {
-            mockContactService.Setup(x => x.AddContact(It.IsAny<AddContactRequestDto>())).ReturnsAsync(true);
-            StatusCodeResult result = null;
+            mockContactService.Setup(x => x.AddContact(It.IsAny<AddContactRequestDto>())).ReturnsAsync(Guid.NewGuid());
+            OkObjectResult result = null;
             Assert.DoesNotThrowAsync(async () =>
             {
-                result = (await phoneBookController.Post(PhoneBookMockData.mockAddContact)) as StatusCodeResult;
+                result = (await phoneBookController.Post(PhoneBookMockData.mockAddContact)) as OkObjectResult;
             });
-            Assert.That(200==result.StatusCode);
+            var value = result.Value as Guid?; 
+            Assert.IsNotNull(result);
+            Assert.NotNull(value);
         }
 
         [Test]
         public void AddContactNegativeTest()
         {
-            mockContactService.Setup(x => x.AddContact(It.IsAny<AddContactRequestDto>())).ReturnsAsync(false);
+            mockContactService.Setup(x => x.AddContact(It.IsAny<AddContactRequestDto>())).ReturnsAsync(null as Guid?);
             StatusCodeResult result = null;
             Assert.DoesNotThrowAsync(async () =>
             {

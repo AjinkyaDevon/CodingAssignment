@@ -24,25 +24,25 @@ namespace PhoneBook.Api.Test.Service
         [Test]
         public void AddContactPositiveTest()
         {
-            mockContactRepo.Setup(x => x.Add(It.IsAny<AddContactRequestDto>())).Returns(Task.CompletedTask);
-            bool result = false;
+            mockContactRepo.Setup(x => x.Add(It.IsAny<AddContactRequestDto>())).ReturnsAsync(Guid.NewGuid());
+            Guid? result = null;
             Assert.DoesNotThrowAsync(async () =>
             {
                result= await contactService.AddContact(PhoneBookMockData.mockAddContact);
             });
-            Assert.That(result);
+            Assert.NotNull(result);
         }
 
         [Test]
         public void AddContactNegativeTest()
         {
             mockContactRepo.Setup(x => x.Add(It.IsAny<AddContactRequestDto>())).ThrowsAsync(new Exception());
-            bool result = false;
+            Guid? result = null;
             Assert.DoesNotThrowAsync(async () =>
             {
                 result = await contactService.AddContact(PhoneBookMockData.mockAddContact);
             });
-            Assert.That(!result);
+            Assert.IsNull(result);
         }
 
         [Test]

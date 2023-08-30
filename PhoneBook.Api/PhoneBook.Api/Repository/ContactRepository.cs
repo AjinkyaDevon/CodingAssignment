@@ -18,12 +18,13 @@ namespace PhoneBook.Repository
             this.mapper = mapper;
         }
 
-        public async Task Add(AddContactRequestDto contactRequestDto)
+        public async Task<Guid?> Add(AddContactRequestDto contactRequestDto)
         {
             var contact = mapper.Map<Contact>(contactRequestDto);
             contact.Id = Guid.NewGuid();
             phoneBookDbContext.Add(contact);
             await phoneBookDbContext.SaveChangesAsync();
+            return contact.Id;
         }
 
         public async Task DeleteById(Guid Id)
